@@ -119,6 +119,12 @@ class GAMLineItems:
             copies = cfg[self.media_type].get('copies', 1) if (self.media_type == 'banner') else 1
             self._creatives = [_method(i_, cfg, size) \
                                for i_, size in enumerate(cfg[self.media_type]['sizes'] * copies)]
+            
+        # limit it if max_count is set
+        max_count = cfg[self.media_type].get('max_count')
+        if max_count is not None:
+            self._creatives = self._creatives[:max_count]
+
         return self._creatives
 
     def creative_name(self, cfg: dict, index: int):

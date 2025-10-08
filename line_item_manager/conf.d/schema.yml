@@ -42,6 +42,8 @@ properties:
         properties:
           copies:
             $ref: "#/definitions/positiveIntegerType"
+          max_count:
+            $ref: "#/definitions/positiveIntegerType"
           sizes:
             $ref: "#/definitions/sizeArray"
           snippet:
