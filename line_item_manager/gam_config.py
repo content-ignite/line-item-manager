@@ -116,8 +116,9 @@ class GAMLineItems:
             _name = f'creative_{self.media_type}'
             _method = getattr(self, _name)
             log(_name, obj={k:cfg[k] for k in ('name', self.media_type)})
+            copies = cfg[self.media_type].get('copies', 1) if (self.media_type == 'banner') else 1
             self._creatives = [_method(i_, cfg, size) \
-                               for i_, size in enumerate(cfg[self.media_type]['sizes'])]
+                               for i_, size in enumerate(cfg[self.media_type]['sizes'] * copies)]
         return self._creatives
 
     def creative_name(self, cfg: dict, index: int):
