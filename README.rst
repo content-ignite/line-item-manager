@@ -15,6 +15,14 @@ Create and manage line items.
 * Free software: Apache Software License 2.0
 * Documentation: https://docs.prebid.org/tools/line-item-manager.html
 
+Upgraded by Content Ignite to include/support:
+----------------------------------------------
+
+* Latest version of GAM API
+* `copies` field inside creative config, allowing duplicates of configs in order to work around GAM's one creative per page limitation
+* `max_count` field inside creative config, allowing for greater control when using `size_override: True`
+* Ability to alternatively use OAuth credentials in the `private-key-file` parameter
+
 
 Example Workflow
 ----------------
