@@ -56,7 +56,7 @@ ad_manager:
   # flow you're not using.                                                    #
   #############################################################################
   # The following values configure the client for the service account flow.
-  path_to_private_key_file: INSERT_PATH_TO_JSON_KEY_FILE_HERE
+  # path_to_private_key_file: INSERT_PATH_TO_JSON_KEY_FILE_HERE
   # delegated_account: INSERT_DOMAIN_WIDE_DELEGATION_ACCOUNT
   # The following values configure the client for the installed application
   # flow.

@@ -104,7 +104,7 @@ def create(ctx: click.core.Context, configfile: str, **kwargs):
         raise click.UsageError(f'Check your private key file. {e.args[0]}', ctx=ctx)
     except Exception as e:
         raise click.UsageError('Check your private key file. Not able to successfully ' \
-                               'access your service account', ctx=ctx)
+                               'access your GAM account', ctx=ctx)
 
     # validate GAM network access
     try:
@@ -114,7 +114,7 @@ def create(ctx: click.core.Context, configfile: str, **kwargs):
     except GoogleAdsError as _e:
         logger.error(f'GoogleAdsError, {_e}')
         raise click.UsageError(
-            'Not able to successfully access your service account.  ' \
+            'Not able to successfully access your GAM account.  ' \
             'Check WARNING/ERROR messages above and consider \nupgrading to latest version.', ctx=ctx)
 
     # validate user configuration

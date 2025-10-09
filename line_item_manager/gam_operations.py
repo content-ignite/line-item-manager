@@ -4,6 +4,7 @@ from typing import Any, List, Optional, Tuple
 from googleads import ad_manager
 from googleads.common import ZeepServiceProxy
 import yaml
+import json
 
 from .config import config, VERBOSE2
 from line_item_manager.utils import load_package_file
@@ -17,7 +18,14 @@ _RESULTS_LOG_LINE = 'Service: "%s" Method: "%s" Results:\n"%s"'
 def client(network_code: int, key_file: str) -> ad_manager.AdManagerClient:
     _cfg = load_package_file('googleads.yaml')
     _cfg['ad_manager']['network_code'] = network_code
-    _cfg['ad_manager']['path_to_private_key_file'] = key_file
+    with open(key_file, 'r') as file:
+        key_file_data = file.read()
+    parsed_data = json.loads(key_file_data)
+    if 'private_key_id' in parsed_data:
+        _cfg['ad_manager']['path_to_private_key_file'] = key_file
+    else:
+        _cfg['ad_manager'].update(parsed_data)
+        
     return ad_manager.AdManagerClient.LoadFromString(yaml.dump(_cfg))
 
 class GAMOperations:
