@@ -1,0 +1,50 @@
+publisher:
+  network_code: 1234
+  network_name: "Video Publisher"
+
+advertiser:
+  name: "Prebid-{{ bidder_name }}"
+
+creative:
+  name: "Prebid {{ bidder_name }}-{{ media_type }}"
+  video:
+    sizes:
+      - height: 480
+        width: 640
+      - height: 240
+        width: 320
+    vast_xml_url: "https://prebid.adnxs.com/pbc/v1/cache?uuid=%%PATTERN:{{ hb_cache_id }}%%"
+
+order:
+  name: "Prebid-{{ bidder_name }}-{{ media_type }}-{{ time }} {{ cpm_min }}-{{ cpm_max }}"
+  appliedTeamIds:
+    - 12345678
+    - 23456789
+
+line_item:
+  name: "Prebid-{{ bidder_name }}-{{ media_type }}-{{ time }} @ {{ cpm }}"
+  item_type: "price_priority"
+
+targeting:
+  bidder:
+    hb_pb: "ci_hb_pb"
+  custom:
+    - name: "country"
+      values:
+        - "US"
+        - "CAN"
+  placement_names:
+    - "placement 1"
+    - "placement 2"
+  ad_unit_names:
+    - "ad unit 1"
+    - "ad unit 2"
+
+rate:
+  currency: "USD"
+  granularity:
+    type: "custom"
+    custom:
+      - min: 1.25
+        max: 1.50
+        interval: 0.25

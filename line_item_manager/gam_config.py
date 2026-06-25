@@ -250,8 +250,8 @@ class GAMConfig:
             for code in config.bidder_codes():
                 bidder = PrebidBidder(
                     code,
-                    override_map=config.user.get('bidder_key_map', {}).get(code, {}),
-                    single_order=config.cli['single_order']
+                    override_map=config.bidder_key_map(code),
+                    single_order=config.single_order
                     )
                 tgt_key = serialize_object(TargetingKey(name=bidder.targeting_key).fetchone())
                 if tgt_key and not tgt_key.get('status', 'ACTIVE') == 'ACTIVE':

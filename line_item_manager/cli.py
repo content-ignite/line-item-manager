@@ -73,13 +73,15 @@ def create(ctx: click.core.Context, configfile: str, **kwargs):
     gam = GAMConfig()
 
     # validate CLI options
-    if not kwargs['single_order'] and not kwargs['bidder_code']:
+    if not config.single_order and not kwargs['bidder_code']:
         raise click.UsageError(
             'You must use --single-order or provide at least one --bidder-code', ctx=ctx)
 
-    if kwargs['single_order'] and kwargs['bidder_code']:
+    if config.single_order and kwargs['bidder_code']:
         raise click.UsageError(
-            'Use of --single-order and --bidder-code is ambiguous and not allowed.', ctx=ctx)
+            'Use of --single-order and --bidder-code is ambiguous and not allowed. '
+            'Use of targeting.bidder.hb_pb with --bidder-code is ambiguous and not allowed.',
+            ctx=ctx)
 
     if not config.network_code:
         raise click.UsageError(

@@ -22,6 +22,7 @@ from line_item_manager.prebid import prebid
 from line_item_manager.utils import load_file, num_hash
 
 from .client import MockAdClient, SINGLE_ORDER_SVC_IDS, SINGLE_ORDER_VIDEO_SVC_IDS, \
+     SINGLE_ORDER_CUSTOM_HB_PB_SVC_IDS, \
      BIDDER_BANNER_SVC_IDS, BIDDER_VIDEO_SVC_IDS, BIDDER_TEST_RUN_VIDEO_SVC_IDS, \
      MISSING_RESOURCE_SVC_IDS, BIDDER_BANNER_SVC_IDS_NO_SIZE_OVERRIDE, \
      BIDDER_VIDEO_BIDDER_KEY_MAP_SVC_IDS, BIDDER_VIDEO_SVC_IDS_SIZE_OVERRIDE
@@ -130,6 +131,8 @@ class Client(MockAdClient):
    'You must use --single-order or provide'),
   (f'tests/resources/cfg_video.yml -k {KEY_FILE} -b ix --single-order',
    'Use of --single-order and --bidder-code'),
+  (f'tests/resources/cfg_video_custom_hb_pb.yml -k {KEY_FILE} -b ix',
+   'targeting.bidder.hb_pb with --bidder-code'),
   (f'tests/resources/cfg_no_pub.yml -k {KEY_FILE} -b ix',
    'Network code must be provided'),
   (f'tests/resources/cfg_no_pub.yml -k {KEY_FILE} -b ix --network-code 1234',
@@ -275,6 +278,26 @@ def test_video_single_order(monkeypatch, cli_config):
     assert len(gam.li_objs) == 1
     assert load_file('tests/resources/video_single_order_expected.yml') == \
       gam.li_objs[0].line_items
+    assert EXPECTED_LICA == gam.lica_objs
+    gam.cleanup()
+
+@pytest.mark.command(f'create tests/resources/cfg_video_custom_hb_pb.yml -k {KEY_FILE}')
+def test_video_single_order_custom_hb_pb(monkeypatch, cli_config):
+    svc_ids = copy.deepcopy(SINGLE_ORDER_SVC_IDS)
+    svc_ids.update(SINGLE_ORDER_CUSTOM_HB_PB_SVC_IDS)
+    svc_ids.update(SINGLE_ORDER_VIDEO_SVC_IDS)
+    client = Client(CUSTOM_TARGETING, svc_ids)
+    monkeypatch.setattr(ad_manager.AdManagerClient, "LoadFromString", lambda x: client)
+    gam = GAMConfig()
+    gam.create_line_items()
+
+    assert config.single_order
+    assert len(gam.li_objs) == 1
+    assert gam.li_objs[0].bidder.targeting_key == "ci_hb_pb"
+    line_items = gam.li_objs[0].line_items
+    assert line_items[0]['targeting']['customTargeting']['children'][1]['keyId'] == 7701
+    assert line_items[0]['targeting']['customTargeting']['children'][1]['valueIds'] == [7801]
+    assert line_items[1]['targeting']['customTargeting']['children'][1]['valueIds'] == [7802]
     assert EXPECTED_LICA == gam.lica_objs
     gam.cleanup()
 

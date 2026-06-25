@@ -8,6 +8,7 @@ from line_item_manager.prebid import PrebidBidder, prebid
 from line_item_manager.utils import package_filename, load_file
 
 CONFIG_FILE = 'tests/resources/cfg.yml'
+CUSTOM_HB_PB_CONFIG_FILE = 'tests/resources/cfg_video_custom_hb_pb.yml'
 KEY_FILE = 'tests/resources/gam_creds.json'
 TMPL_FILE = 'tests/resources/li_template.yml'
 SETTINGS_FILE = 'tests/resources/settings.yml'
@@ -42,6 +43,20 @@ def test_single_order(cli_config):
     assert [PrebidBidder(c_, single_order=config.cli['single_order']).targeting_key \
             for c_ in config.bidder_codes()] == ['hb_pb']
     assert config.user['order']['appliedTeamIds'] == [12345678, 23456789]
+
+@pytest.mark.command(f'create {CUSTOM_HB_PB_CONFIG_FILE} -k {KEY_FILE}')
+def test_custom_hb_pb_implies_single_order(cli_config):
+    assert config.single_order
+    assert config.bidder_codes() == ['hb']
+    assert config.targeting_bidder_hb_pb() == 'ci_hb_pb'
+    assert [
+        PrebidBidder(
+            c_,
+            override_map=config.bidder_key_map(c_),
+            single_order=config.single_order,
+        ).targeting_key
+        for c_ in config.bidder_codes()
+    ] == ['ci_hb_pb']
 
 def test_fmt_bidder_key():
     assert PrebidBidder(CONFIG_BIDDER).fmt_bidder_key('prefix') == f"prefix_{CONFIG_BIDDER}"

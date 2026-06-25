@@ -121,6 +121,7 @@ line_item:
 ###############################################################################
 targeting:
   # bidder: # object (optional)
+    # hb_pb: "ci_hb_pb" # optional, implies single-order targeting and replaces hb_pb
     # reportableType: "ON" # optional, defaults to "OFF", choices: "ON", "OFF", "CUSTOM_DIMENSION"
   custom: # list (optional)
     - name: "country"

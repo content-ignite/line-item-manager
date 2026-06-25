@@ -95,15 +95,34 @@ class Config:
         return self._schema
 
     def bidder_codes(self) -> List[str]:
-        if self.cli['single_order']:
+        if self.single_order:
             return [self.app['prebid']['bidders']['single_order']['code']]
         return self.cli['bidder_code']
 
     def media_types(self) -> List[str]:
         return [m_ for m_ in ('video', 'banner') if self.user['creative'].get(m_)]
 
+    @property
+    def single_order(self) -> bool:
+        return self.cli['single_order'] or bool(self.targeting_bidder_hb_pb())
+
     def targeting_bidder_key_config(self) -> Dict:
-        return self.user.get('targeting', {}).get('bidder', {})
+        targeting = self.user.get('targeting') or {}
+        if not isinstance(targeting, dict):
+            return {}
+        bidder = targeting.get('bidder') or {}
+        return bidder if isinstance(bidder, dict) else {}
+
+    def targeting_bidder_hb_pb(self) -> Optional[str]:
+        targeting_key = self.app['prebid']['bidders']['targeting_key']
+        return self.targeting_bidder_key_config().get(targeting_key)
+
+    def bidder_key_map(self, code: str) -> Dict[str, str]:
+        key_map = dict(self.user.get('bidder_key_map', {}).get(code, {}))
+        hb_pb = self.targeting_bidder_hb_pb()
+        if hb_pb:
+            key_map[self.app['prebid']['bidders']['targeting_key']] = hb_pb
+        return key_map
 
     def custom_targeting_key_values(self) -> List[Dict]:
         return [

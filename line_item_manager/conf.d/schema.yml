@@ -143,6 +143,9 @@ properties:
         type: "object"
         additionalProperties: False
         properties:
+          hb_pb:
+            type: "string"
+            minLength: 1
           reportableType:
             $ref: "#/definitions/targetingReportableType"
       custom:

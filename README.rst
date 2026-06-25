@@ -22,6 +22,7 @@ Upgraded by Content Ignite to include/support:
 * `copies` field inside creative config, allowing duplicates of configs in order to work around GAM's one creative per page limitation
 * `max_count` field inside creative config, allowing for greater control when using `size_override: True`
 * Ability to alternatively use OAuth credentials in the `private-key-file` parameter
+* Ability to override the default `hb_pb` key used for Prebid price targeting in single-order mode
 
 
 Example Workflow
@@ -110,6 +111,18 @@ Advanced Features
    $ line_item_manager create my_config.yml \
    --single-order \
    --schema my_schema.yml
+
+4. Use a custom single-order Prebid price targeting key
+::
+
+   # In my_config.yml, replace the default hb_pb targeting key:
+   targeting:
+     bidder:
+       hb_pb: "ci_hb_pb"
+
+   # This implies single-order targeting, so do not pass bidder codes.
+   $ line_item_manager create my_config.yml \
+   --private-key-file my_gam_creds.json
 
 Local Development
 -----------------

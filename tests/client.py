@@ -50,6 +50,17 @@ SINGLE_ORDER_SVC_IDS = dict(
     },
 )
 
+SINGLE_ORDER_CUSTOM_HB_PB_SVC_IDS = dict(
+    CustomTargetingService={
+        dump(dict(name="country")): 7101,
+        dump(dict(customTargetingKeyId=7101, name="US")): 7301,
+        dump(dict(customTargetingKeyId=7101, name="CAN")): 7302,
+        dump(dict(name="ci_hb_pb")): 7701,
+        dump(dict(customTargetingKeyId=7701, name="1.25")): 7801,
+        dump(dict(customTargetingKeyId=7701, name="1.50")): 7802,
+    },
+)
+
 MISSING_RESOURCE_SVC_IDS = dict(
     CustomTargetingService={
         dump(dict(name="country")): 7101,
